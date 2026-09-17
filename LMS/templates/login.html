@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-shell">
+  <section class="auth-card">
+    <div class="brand centered"><div class="brand-mark">L</div><div><strong>LMS</strong><small>Library Management System</small></div></div>
+    <h1>Welcome back</h1>
+    <p class="muted">Sign in to manage your library.</p>
+    <form method="post" class="form-grid one">
+      <label>Username<input name="username" required autocomplete="username"></label>
+      <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
+      <button class="primary full">Sign in</button>
+    </form>
+    <div class="demo-note">Demo: <b>admin</b> / <b>admin123</b></div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><div><p class="eyebrow">CIRCULATION</p><h1>Returns & overdue</h1><p class="muted">Return active loans and monitor deadlines.</p></div></div>
+<section class="panel">
+<div class="panel-head"><div><h2>Active loans</h2></div><form class="search"><input name="q" value="{{ q }}" placeholder="Search book or member..."><button>Search</button></form></div>
+<div class="table-wrap"><table><thead><tr><th>Book</th><th>Member</th><th>Borrowed</th><th>Due</th><th>Status</th><th></th></tr></thead>
+<tbody>{% for row in loans %}
+<tr><td><b>{{ row.title }}</b><span class="sub">{{ row.author }}</span></td><td>{{ row.name }}<span class="sub">{{ row.member_code }}</span></td><td>{{ row.borrowed_at|datefmt }}</td><td>{{ row.due_at|datefmt }}</td>
+<td>{% if row.due_at < now|string %}<span class="pill bad">Overdue</span>{% else %}<span class="pill warn">On loan</span>{% endif %}</td>
+<td><form method="post" action="{{ url_for('return_book', loan_id=row.id) }}"><button class="primary small">Return</button></form></td></tr>
+{% else %}<tr><td colspan="6" class="empty">No active loans.</td></tr>{% endfor %}</tbody></table></div>
+</section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><div><p class="eyebrow">PEOPLE</p><h1>Library Members</h1><p class="muted">Manage member records and contact details.</p></div></div>
+<div class="grid-2">
+<section class="panel">
+<h2>Add member</h2>
+<form method="post" class="form-grid">
+<label>Member code<input name="member_code" placeholder="LMS003" required></label>
+<label>Name<input name="name" required></label>
+<label>Email<input type="email" name="email"></label>
+<label>Phone<input name="phone"></label>
+<div></div><button class="primary">Add member</button>
+</form>
+</section>
+<section class="panel accent-panel"><h2>Member record</h2><p>Member codes are unique identifiers used throughout the borrowing and reservation workflow.</p></section>
+</div>
+<section class="panel">
+<div class="panel-head"><div><h2>Members</h2><p class="muted">{{ members|length }} result(s)</p></div><form class="search"><input name="q" value="{{ q }}" placeholder="Search name, code, email..."><button>Search</button></form></div>
+<div class="table-wrap"><table><thead><tr><th>Code</th><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th></th></tr></thead>
+<tbody>{% for m in members %}<tr><td><span class="code">{{ m.member_code }}</span></td><td><b>{{ m.name }}</b></td><td>{{ m.email or '—' }}</td><td>{{ m.phone or '—' }}</td><td>{{ m.joined_at|datefmt }}</td><td><form method="post" action="{{ url_for('delete_member', member_id=m.id) }}" onsubmit="return confirm('Delete this member?')"><button class="ghost danger-text">Delete</button></form></td></tr>{% else %}<tr><td colspan="6" class="empty">No members found.</td></tr>{% endfor %}</tbody></table></div>
+</section>
+{% endblock %}

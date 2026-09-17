@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><div><p class="eyebrow">BONUS</p><h1>Reservations & waitlist</h1><p class="muted">Queue members for unavailable books.</p></div></div>
+<div class="grid-2">
+<section class="panel">
+<h2>Add reservation</h2>
+<form method="post" class="form-grid one">
+<label>Book<select name="book_id" required><option value="">Select an unavailable book…</option>{% for b in books if b.available_copies == 0 %}<option value="{{ b.id }}">{{ b.title }} — {{ b.author }}</option>{% endfor %}</select></label>
+<label>Member<select name="member_id" required><option value="">Select member…</option>{% for m in members %}<option value="{{ m.id }}">{{ m.name }} — {{ m.member_code }}</option>{% endfor %}</select></label>
+<button class="primary">Join waitlist</button>
+</form>
+</section>
+<section class="panel accent-panel"><h2>How it works</h2><p>Reservations are placed in time order. When a borrowed copy is returned, the oldest waiting reservation is marked <b>Ready</b>.</p></section>
+</div>
+<section class="panel"><div class="panel-head"><div><h2>Reservation queue</h2></div></div>
+<div class="table-wrap"><table><thead><tr><th>Book</th><th>Member</th><th>Reserved</th><th>Status</th><th></th></tr></thead>
+<tbody>{% for r in reservations %}<tr><td><b>{{ r.title }}</b></td><td>{{ r.name }}<span class="sub">{{ r.member_code }}</span></td><td>{{ r.reserved_at|datefmt }}</td><td><span class="pill {{ 'ok' if r.status == 'ready' else 'warn' }}">{{ r.status|title }}</span></td><td>{% if r.status in ['waiting','ready'] %}<form method="post" action="{{ url_for('cancel_reservation', reservation_id=r.id) }}"><button class="ghost danger-text">Cancel</button></form>{% endif %}</td></tr>
+{% else %}<tr><td colspan="5" class="empty">No reservations yet.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}

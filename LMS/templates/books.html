@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><div><p class="eyebrow">CATALOG</p><h1>Books</h1><p class="muted">Add, search and manage the library collection.</p></div></div>
+<div class="grid-2">
+<section class="panel">
+  <h2>Add a book</h2>
+  <form method="post" class="form-grid">
+    <label>Title<input name="title" required></label>
+    <label>Author<input name="author" required></label>
+    <label>ISBN<input name="isbn" placeholder="Optional"></label>
+    <label>Category<input name="category" placeholder="e.g. Programming"></label>
+    <label>Copies<input type="number" name="copies" min="1" value="1" required></label>
+    <div></div>
+    <button class="primary">Add book</button>
+  </form>
+</section>
+<section class="panel accent-panel"><h2>Availability rule</h2><p>Only books with at least one available copy can be borrowed. When a copy is returned, the system automatically increases availability and can promote the next waitlist reservation.</p></section>
+</div>
+
+<section class="panel">
+  <div class="panel-head">
+    <div><h2>Book collection</h2><p class="muted">{{ books|length }} result(s)</p></div>
+    <form class="search"><input name="q" value="{{ q }}" placeholder="Search title, author, ISBN..."><button>Search</button></form>
+  </div>
+  <div class="table-wrap"><table><thead><tr><th>Title</th><th>Author</th><th>Category</th><th>ISBN</th><th>Available</th><th>Total</th><th></th></tr></thead>
+  <tbody>{% for b in books %}<tr>
+    <td><b>{{ b.title }}</b></td><td>{{ b.author }}</td><td>{{ b.category or '—' }}</td><td>{{ b.isbn or '—' }}</td>
+    <td><span class="pill {{ 'ok' if b.available_copies else 'bad' }}">{{ b.available_copies }}</span></td><td>{{ b.total_copies }}</td>
+    <td><form method="post" action="{{ url_for('delete_book', book_id=b.id) }}" onsubmit="return confirm('Delete this book?')"><button class="ghost danger-text">Delete</button></form></td>
+  </tr>{% else %}<tr><td colspan="7" class="empty">No books found.</td></tr>{% endfor %}</tbody></table></div>
+</section>
+{% endblock %}

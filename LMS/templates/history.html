@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><div><p class="eyebrow">RECORDS</p><h1>Borrowing history</h1><p class="muted">Complete borrowing and return history stored in the database.</p></div></div>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Book</th><th>Member</th><th>Borrowed</th><th>Due</th><th>Returned</th><th>Status</th></tr></thead>
+<tbody>{% for row in loans %}<tr><td><b>{{ row.title }}</b><span class="sub">{{ row.author }}</span></td><td>{{ row.name }}<span class="sub">{{ row.member_code }}</span></td><td>{{ row.borrowed_at|datefmt }}</td><td>{{ row.due_at|datefmt }}</td><td>{{ row.returned_at|datefmt }}</td><td>{% if row.returned_at %}<span class="pill ok">Returned</span>{% elif row.due_at < now|string %}<span class="pill bad">Overdue</span>{% else %}<span class="pill warn">Borrowed</span>{% endif %}</td></tr>{% else %}<tr><td colspan="6" class="empty">No history yet.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}

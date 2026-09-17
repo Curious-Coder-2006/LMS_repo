@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or "LMS — Library Management System" }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% if session.get('user_id') %}
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">L</div><div><strong>LMS</strong><small>Library Management</small></div></div>
+    <nav>
+      <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">Dashboard</a>
+      <a href="{{ url_for('books') }}" class="{{ 'active' if request.endpoint == 'books' }}">Books</a>
+      <a href="{{ url_for('members') }}" class="{{ 'active' if request.endpoint == 'members' }}">Members</a>
+      <a href="{{ url_for('borrow') }}" class="{{ 'active' if request.endpoint == 'borrow' }}">Borrow Book</a>
+      <a href="{{ url_for('returns') }}" class="{{ 'active' if request.endpoint == 'returns' }}">Returns & Overdue</a>
+      <a href="{{ url_for('reservations') }}" class="{{ 'active' if request.endpoint == 'reservations' }}">Reservations</a>
+      <a href="{{ url_for('history') }}" class="{{ 'active' if request.endpoint == 'history' }}">Borrowing History</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="signed">Signed in as <b>{{ session.get('username') }}</b></div>
+      <a class="logout" href="{{ url_for('logout') }}">Log out</a>
+    </div>
+  </aside>
+{% endif %}
+
+<main class="{{ 'with-sidebar' if session.get('user_id') else '' }}">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-stack">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="{{ 'with-sidebar' if session.get('user_id') else '' }}">LMS · Library Management System · {{ current_year }}</footer>
+</body>
+</html>

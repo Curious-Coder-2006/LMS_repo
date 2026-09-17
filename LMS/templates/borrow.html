@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><div><p class="eyebrow">CIRCULATION</p><h1>Borrow a book</h1><p class="muted">Issue an available copy to a registered member.</p></div></div>
+<section class="panel narrow">
+<form method="post" class="form-grid one">
+<label>Book
+<select name="book_id" required>
+<option value="">Select a book…</option>
+{% for b in books %}<option value="{{ b.id }}" {% if b.available_copies == 0 %}disabled{% endif %}>{{ b.title }} — {{ b.author }} ({{ b.available_copies }} available)</option>{% endfor %}
+</select></label>
+<label>Member
+<select name="member_id" required><option value="">Select a member…</option>{% for m in members %}<option value="{{ m.id }}">{{ m.name }} — {{ m.member_code }}</option>{% endfor %}</select></label>
+<div class="info">Standard loan period: <b>14 days</b>. Unavailable books cannot be borrowed; use the reservation page to join the waitlist.</div>
+<button class="primary">Confirm borrowing</button>
+</form>
+</section>
+{% endblock %}
